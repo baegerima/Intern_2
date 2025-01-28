@@ -16,5 +16,7 @@ public class SharedCompetence {
 
     @Column(nullable = false)
     private String name;
+
+    
 }
 

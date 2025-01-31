@@ -7,13 +7,9 @@
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 <body>
-<div style="width: 75%; margin: auto;">
+<div style="width: 90%; margin: auto;">
   <canvas id="competencyChart"></canvas>
 </div>
-
-<!-- Вывод данных для отладки -->
-<p>Competencies: <span th:text="${competencies}"></span></p>
-<p>Grades: <span th:text="${grades}"></span></p>
 
 <script th:inline="javascript">
   /*<![CDATA[*/
@@ -31,7 +27,7 @@
   new Chart(ctx, {
     type: 'bar',
     data: {
-      labels: competencies,
+      labels: competencies.map(name => name.length > 15 ? name.replace(/(.{15})/g, '$1\n') : name), // Перенос длинных названий
       datasets: [{
         label: 'Average Grade',
         data: grades,
@@ -43,19 +39,30 @@
     options: {
       responsive: true,
       maintainAspectRatio: false,
+      plugins: {
+        legend: {
+          display: true,
+          position: 'top'
+        }
+      },
       scales: {
         y: {
           beginAtZero: true,
           max: 100,
           title: {
             display: true,
-            text: 'Grade (out of 100)'
+            text: 'Grades'
           }
         },
         x: {
           title: {
             display: true,
             text: 'Competencies'
+          },
+          ticks: {
+            autoSkip: false,
+            maxRotation: 45,
+            minRotation: 45
           }
         }
       }

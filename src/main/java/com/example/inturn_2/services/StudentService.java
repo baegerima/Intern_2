@@ -13,11 +13,11 @@ public class StudentService {
     @Autowired
     private StudentRepository studentRepository;
 
-    public List<Student> getAllStudents() {
+    public List<Student> getAllStudents() {  // Return List<Student>, not List<StudentCourse>
         return studentRepository.findAll();
     }
 
-    public Optional<Student> getStudentById(int id) {
+    public Optional<Student> getStudentById(int id) {  // Return Optional<Student>, not Optional<StudentCourse>
         return studentRepository.findById(id);
     }
 

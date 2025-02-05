@@ -36,10 +36,13 @@ public class CourseSharedCompetencesController {
 
     // Create new CourseSharedCompetences
     @PostMapping("/create")
-    public ResponseEntity<CourseSharedCompetences> create(@RequestBody CourseSharedCompetences courseSharedCompetences) {
-        CourseSharedCompetences created = service.create(courseSharedCompetences);
+    public ResponseEntity<CourseSharedCompetences> create(
+            @RequestParam int courseId,
+            @RequestParam int sharedCompetenceId) {
+        CourseSharedCompetences created = service.create(courseId, sharedCompetenceId);
         return ResponseEntity.ok(created);
     }
+
 
     // Update existing CourseSharedCompetences
     @PutMapping("update/{id}")

@@ -30,6 +30,4 @@ public class Course {
     @JsonManagedReference
     private List<CourseUniqueCompetences> uniqueCompetences;
 
-    @OneToMany(mappedBy = "course", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    private List<StudentCourse> students;
 }

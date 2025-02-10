@@ -9,6 +9,7 @@
     body {
       margin: 0;
       display: flex;
+      flex-direction: column;
       justify-content: center;
       align-items: center;
       height: 100vh;
@@ -16,7 +17,21 @@
     }
     .chart-container {
       width: 95vw;
-      height: 90vh;
+      height: 80vh;
+    }
+    .redirect-button {
+      margin-top: 20px;
+      padding: 10px 20px;
+      font-size: 18px;
+      background-color: #4CAF50;
+      color: white;
+      border: none;
+      cursor: pointer;
+      border-radius: 5px;
+      transition: 0.3s;
+    }
+    .redirect-button:hover {
+      background-color: #45a049;
     }
   </style>
 </head>
@@ -25,6 +40,9 @@
 <div class="chart-container">
   <canvas id="competencyChart"></canvas>
 </div>
+
+<!-- ✅ Button for Redirection -->
+<button class="redirect-button" onclick="redirectToStudentGrades()">Go to Student Grades</button>
 
 <script th:inline="javascript">
   /*<![CDATA[*/
@@ -42,7 +60,7 @@
   new Chart(ctx, {
     type: 'bar',
     data: {
-      labels: competencies.map(name => name.length > 20 ? name.replace(/(.{20})/g, '$1\n') : name), // Перенос длинных названий
+      labels: competencies.map(name => name.length > 20 ? name.replace(/(.{20})/g, '$1\n') : name), // Wrap long names
       datasets: [{
         label: 'Average Grade',
         data: grades,
@@ -97,6 +115,10 @@
       }
     }
   });
+
+  function redirectToStudentGrades() {
+    window.location.href = "http://localhost:3000/student-grades"; // Update if necessary
+  }
   /*]]>*/
 </script>
 

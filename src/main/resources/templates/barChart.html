@@ -13,25 +13,41 @@
       justify-content: center;
       align-items: center;
       height: 100vh;
-      background-color: #f4f4f4;
+      background-color: #f4e1d2; /* Light brown background */
     }
     .chart-container {
       width: 95vw;
       height: 80vh;
+      background-color: white; /* White background for the chart container */
+      padding: 20px;
+      border-radius: 10px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     }
-    .redirect-button {
+    .button-container {
       margin-top: 20px;
+      display: flex;
+      gap: 10px;
+    }
+    .redirect-button, .download-button {
       padding: 10px 20px;
       font-size: 18px;
-      background-color: #4CAF50;
       color: white;
       border: none;
       cursor: pointer;
       border-radius: 5px;
       transition: 0.3s;
     }
+    .redirect-button {
+      background-color: chocolate; /* Chocolate color for the redirect button */
+    }
     .redirect-button:hover {
-      background-color: #45a049;
+      background-color: #d2691e; /* Darker chocolate on hover */
+    }
+    .download-button {
+      background-color: #8b4513; /* Brown color for the download button */
+    }
+    .download-button:hover {
+      background-color: #a0522d; /* Darker brown on hover */
     }
   </style>
 </head>
@@ -41,8 +57,12 @@
   <canvas id="competencyChart"></canvas>
 </div>
 
-<!-- ✅ Button for Redirection -->
-<button class="redirect-button" onclick="redirectToStudentGrades()">Go to Student Grades</button>
+<div class="button-container">
+  <!-- Button for Redirection -->
+  <button class="redirect-button" onclick="redirectToStudentGrades()">Go to Student Grades</button>
+  <!-- Button for Downloading Graph -->
+  <button class="download-button" onclick="downloadGraph()">Download Graph</button>
+</div>
 
 <script th:inline="javascript">
   /*<![CDATA[*/
@@ -57,15 +77,15 @@
   }
 
   const ctx = document.getElementById('competencyChart').getContext('2d');
-  new Chart(ctx, {
+  const chart = new Chart(ctx, {
     type: 'bar',
     data: {
       labels: competencies.map(name => name.length > 20 ? name.replace(/(.{20})/g, '$1\n') : name), // Wrap long names
       datasets: [{
         label: 'Average Grade',
         data: grades,
-        backgroundColor: 'rgba(75, 192, 192, 0.2)',
-        borderColor: 'rgba(75, 192, 192, 1)',
+        backgroundColor: 'rgba(248,2,36,0.2)',
+        borderColor: 'rgb(163,0,34)',
         borderWidth: 1
       }]
     },
@@ -118,6 +138,13 @@
 
   function redirectToStudentGrades() {
     window.location.href = "http://localhost:3000/student-grades"; // Update if necessary
+  }
+
+  function downloadGraph() {
+    const link = document.createElement('a');
+    link.download = 'competency_chart.png'; // Default filename
+    link.href = document.getElementById('competencyChart').toDataURL('image/png');
+    link.click();
   }
   /*]]>*/
 </script>

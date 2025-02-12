@@ -14,12 +14,12 @@
       justify-content: center;
       align-items: center;
       height: 100vh;
-      background-color: #f4e1d2; /* Light brown background */
+      background-color: #f4e1d2;
     }
     .chart-container {
       width: 95vw;
       height: 80vh;
-      background-color: white; /* White background for the chart container */
+      background-color: white;
       padding: 20px;
       border-radius: 10px;
       box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
@@ -39,34 +39,28 @@
       transition: 0.3s;
     }
     .redirect-button {
-      background-color: chocolate; /* Chocolate color for the redirect button */
+      background-color: chocolate;
     }
     .redirect-button:hover {
-      background-color: #d2691e; /* Darker chocolate on hover */
+      background-color: #d2691e;
     }
     .download-button {
-      background-color: #8b4513; /* Brown color for the download button */
+      background-color: #8b4513;
     }
     .download-button:hover {
-      background-color: #a0522d; /* Darker brown on hover */
+      background-color: #a0522d;
     }
   </style>
 </head>
 <body>
-
 <div class="chart-container">
   <canvas id="competencyChart"></canvas>
 </div>
-
 <div class="button-container">
-  <!-- Button for Redirection -->
   <button class="redirect-button" onclick="redirectToStudentGrades()">Go to Student Grades</button>
-  <!-- Button for Downloading Graph -->
   <button class="download-button" onclick="downloadGraph()">Download Graph</button>
 </div>
-
 <script th:inline="javascript">
-  /*<![CDATA[*/
   var competencies = /*[[${competencies}]]*/ [];
   var grades = /*[[${grades}]]*/ [];
 
@@ -81,7 +75,7 @@
   const chart = new Chart(ctx, {
     type: 'bar',
     data: {
-      labels: competencies.map(name => name.length > 20 ? name.replace(/(.{20})/g, '$1\n') : name), // Wrap long names
+      labels: competencies.map(name => name.length > 20 ? name.replace(/(.{20})/g, '$1\n') : name),
       datasets: [{
         label: 'Average Grade',
         data: grades,
@@ -104,14 +98,14 @@
               type: 'line',
               yMin: 50,
               yMax: 50,
-              borderColor: 'rgba(255, 235, 59, 0.6)', // Light yellow
+              borderColor: 'rgba(255, 235, 59, 0.6)',
               borderWidth: 2,
-              borderDash: [5, 5], // Dashed line
+              borderDash: [5, 5],
               label: {
                 enabled: true,
-                content: 'Passing Grade (50)',
+                content: 'Median (50)',
                 position: 'end',
-                backgroundColor: 'rgba(255, 235, 59, 0.8)', // Light yellow
+                backgroundColor: 'rgba(255, 235, 59, 0.8)',
                 color: '#000',
                 font: {
                   size: 14,
@@ -123,14 +117,14 @@
               type: 'line',
               yMin: 80,
               yMax: 80,
-              borderColor: 'rgba(102, 187, 106, 0.6)', // Light green
+              borderColor: 'rgba(102, 187, 106, 0.6)',
               borderWidth: 2,
-              borderDash: [5, 5], // Dashed line
+              borderDash: [5, 5],
               label: {
                 enabled: true,
                 content: 'High Achievement (80)',
                 position: 'end',
-                backgroundColor: 'rgba(102, 187, 106, 0.8)', // Light green
+                backgroundColor: 'rgba(102, 187, 106, 0.8)',
                 color: '#000',
                 font: {
                   size: 14,
@@ -155,6 +149,11 @@
           ticks: {
             font: {
               size: 16
+            },
+            callback: function(value) {
+              if (value === 50) return 'Median (50)';
+              if (value === 80) return 'High Achievement (80)';
+              return value;
             }
           }
         },
@@ -180,17 +179,34 @@
   });
 
   function redirectToStudentGrades() {
-    window.location.href = "http://localhost:3000/student-grades"; // Update if necessary
+    window.location.href = "http://localhost:3000/student-grades";
   }
 
   function downloadGraph() {
+    const canvas = document.getElementById('competencyChart');
+    const ctx = canvas.getContext('2d');
+
+    // Создаем временный холст
+    const tempCanvas = document.createElement('canvas');
+    const tempCtx = tempCanvas.getContext('2d');
+
+    tempCanvas.width = canvas.width;
+    tempCanvas.height = canvas.height;
+
+    // Заполняем фон белым цветом
+    tempCtx.fillStyle = '#ffffff';
+    tempCtx.fillRect(0, 0, tempCanvas.width, tempCanvas.height);
+
+    // Рисуем график поверх белого фона
+    tempCtx.drawImage(canvas, 0, 0);
+
+    // Создаем ссылку для скачивания в формате JPEG
     const link = document.createElement('a');
-    link.download = 'competency_chart.png'; // Default filename
-    link.href = document.getElementById('competencyChart').toDataURL('image/png');
+    link.download = 'competency_chart.jpg';
+    link.href = tempCanvas.toDataURL('image/jpeg', 1.0); // Качество 100%
     link.click();
   }
-  /*]]>*/
-</script>
 
+</script>
 </body>
 </html>

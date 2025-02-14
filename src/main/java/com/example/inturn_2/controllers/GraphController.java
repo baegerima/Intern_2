@@ -18,6 +18,7 @@ public class GraphController {
     @GetMapping("/barChart")
     public String barChart(Model model) {
         List<Course> courses = courseService.getAllCourses();
+        System.out.println("Fetched courses: " + courses.size());
 
         Map<String, Double> competencyGrades = new HashMap<>();
         Map<String, Integer> competencyCounts = new HashMap<>();
@@ -25,22 +26,24 @@ public class GraphController {
         for (Course course : courses) {
             int courseGrade = course.getGrade();
 
-            // Обрабатываем общие компетенции
+            // Process shared competencies
             for (CourseSharedCompetences sharedCompetence : course.getSharedCompetences()) {
                 String competenceName = sharedCompetence.getSharedCompetence().getName();
+                System.out.println("Processing shared competence: " + competenceName);
                 competencyGrades.put(competenceName, competencyGrades.getOrDefault(competenceName, 0.0) + courseGrade);
                 competencyCounts.put(competenceName, competencyCounts.getOrDefault(competenceName, 0) + 1);
             }
 
-            // Обрабатываем уникальные компетенции
+            // Process unique competencies
             for (CourseUniqueCompetences uniqueCompetence : course.getUniqueCompetences()) {
                 String competenceName = uniqueCompetence.getUniqueCompetence().getName();
+                System.out.println("Processing unique competence: " + competenceName);
                 competencyGrades.put(competenceName, competencyGrades.getOrDefault(competenceName, 0.0) + courseGrade);
                 competencyCounts.put(competenceName, competencyCounts.getOrDefault(competenceName, 0) + 1);
             }
         }
 
-        // Рассчитываем средние оценки
+        // Calculate average grades
         List<String> competencyNames = new ArrayList<>();
         List<Double> averageGrades = new ArrayList<>();
 
@@ -53,6 +56,9 @@ public class GraphController {
             competencyNames.add(competenceName);
             averageGrades.add(averageGrade);
         }
+
+        System.out.println("Competencies: " + competencyNames);
+        System.out.println("Average Grades: " + averageGrades);
 
         model.addAttribute("competencies", competencyNames);
         model.addAttribute("grades", averageGrades);

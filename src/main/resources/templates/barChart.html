@@ -71,11 +71,12 @@
     console.warn("Warning: No data available for chart.");
   }
 
+  // Render the chart using Chart.js
   const ctx = document.getElementById('competencyChart').getContext('2d');
   const chart = new Chart(ctx, {
     type: 'bar',
     data: {
-      labels: competencies.map(name => name.length > 20 ? name.replace(/(.{20})/g, '$1\n') : name),
+      labels: competencies,
       datasets: [{
         label: 'Average Grade',
         data: grades,
@@ -177,37 +178,6 @@
       }
     }
   });
-
-  function redirectToStudentGrades() {
-    window.location.href = "https://transcriptfront-62cad49a4e47.herokuapp.com/student-grades";
-  }
-
-  function downloadGraph() {
-    const canvas = document.getElementById('competencyChart');
-    const ctx = canvas.getContext('2d');
-
-    // Создаем временный холст
-    const tempCanvas = document.createElement('canvas');
-    const tempCtx = tempCanvas.getContext('2d');
-
-    tempCanvas.width = canvas.width;
-    tempCanvas.height = canvas.height;
-
-    // Заполняем фон белым цветом
-    tempCtx.fillStyle = '#ffffff';
-    tempCtx.fillRect(0, 0, tempCanvas.width, tempCanvas.height);
-
-    // Рисуем график поверх белого фона
-    tempCtx.drawImage(canvas, 0, 0);
-
-    // Создаем ссылку для скачивания в формате JPEG
-    const link = document.createElement('a');
-    link.download = 'competency_chart.jpg';
-    link.href = tempCanvas.toDataURL('image/jpeg', 1.0); // Качество 100%
-    link.click();
-  }
-  console.log("Competencies:", /*[[${competencies}]]*/ []);
-  console.log("Grades:", /*[[${grades}]]*/ []);
 </script>
 </body>
 </html>

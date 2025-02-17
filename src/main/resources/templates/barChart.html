@@ -60,7 +60,7 @@
   <button class="redirect-button" onclick="redirectToStudentGrades()">Go to Student Grades</button>
   <button class="download-button" onclick="downloadGraph()">Download Graph</button>
 </div>
-<script th:inline="javascript">
+<script src="/js/chart.js" th:inline="javascript">
   var competencies = /*[[${competencies}]]*/ [];
   var grades = /*[[${grades}]]*/ [];
 
@@ -178,6 +178,19 @@
       }
     }
   });
+    function redirectToStudentGrades() {
+    window.location.href = "https://transcript2-c5ec5ab05f1a.herokuapp.com/student-grades";  // Замените на нужный URL
+  }
+
+    function downloadGraph() {
+    const canvas = document.getElementById('competencyChart');
+    const url = canvas.toDataURL('image/jpg');
+    const link = document.createElement('a');
+    link.href = url;
+    link.download = 'competency-chart.png';
+    link.click();
+  }
+
 
 </script>
 </body>

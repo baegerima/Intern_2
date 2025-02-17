@@ -9,9 +9,11 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 public class CorsConfig implements WebMvcConfigurer {
     @Override
     public void addCorsMappings(CorsRegistry registry) {
-        registry.addMapping("/api/**")
-                .allowedOrigins("https://transcriptfront-62cad49a4e47.herokuapp.com")
+        registry.addMapping("/**")
+                .allowedOrigins("https://transcriptfront-62cad49a4e47.herokuapp.com",
+                        "https://transcriptfront-62cad49a4e47.herokuapp.com/") // два URL
                 .allowedMethods("GET", "POST", "PUT", "DELETE")
                 .allowedHeaders("*");
+
     }
 }

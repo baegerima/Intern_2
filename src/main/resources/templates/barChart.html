@@ -4,8 +4,11 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Competency Grades Bar Chart</title>
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <!-- Correct Chart.js CDN -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.2.1/chart.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-annotation@3.0.1/dist/chartjs-plugin-annotation.min.js"></script>
+
     <style>
         body {
             margin: 0;
@@ -59,15 +62,17 @@
 <div class="button-container">
     <button class="redirect-button" onclick="redirectToStudentGrades()">Go to Student Grades</button>
     <button class="download-button" onclick="downloadGraph()">Download Graph</button>
-</div>
-<script th:inline="javascript">
-    /*[[${competencies}]]*/ var competencies = [[${competencies}]];
-    /*[[${grades}]]*/ var grades = [[${grades}]];
+</div><script th:inline="javascript">
+    // Ensure that the data is properly passed from Thymeleaf to JavaScript
+    var competencies = /*[[${competencies}]]*/ [];
+    var grades = /*[[${grades}]]*/ [];
 
+    // Log the values to check for correct injection
     console.log("Competencies:", competencies);
     console.log("Grades:", grades);
 
-    if (competencies.length === 0 || grades.length === 0) {
+    // Check if competencies and grades have valid data
+    if (!competencies || competencies.length === 0 || !grades || grades.length === 0) {
         console.warn("Warning: No data available for chart.");
     }
 
@@ -186,24 +191,24 @@
         const canvas = document.getElementById('competencyChart');
         const ctx = canvas.getContext('2d');
 
-        // Создаем временный холст
+        // Create a temporary canvas to ensure white background
         const tempCanvas = document.createElement('canvas');
         const tempCtx = tempCanvas.getContext('2d');
 
         tempCanvas.width = canvas.width;
         tempCanvas.height = canvas.height;
 
-        // Заполняем фон белым цветом
+        // Fill the background with white
         tempCtx.fillStyle = '#ffffff';
         tempCtx.fillRect(0, 0, tempCanvas.width, tempCanvas.height);
 
-        // Рисуем график поверх белого фона
+        // Draw the original chart on top
         tempCtx.drawImage(canvas, 0, 0);
 
-        // Создаем ссылку для скачивания в формате JPEG
+        // Create and trigger a download link
         const link = document.createElement('a');
         link.download = 'competency_chart.jpg';
-        link.href = tempCanvas.toDataURL('image/jpeg', 1.0); // Качество 100%
+        link.href = tempCanvas.toDataURL('image/jpeg', 1.0);
         link.click();
     }
 </script>

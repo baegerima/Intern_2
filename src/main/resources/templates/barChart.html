@@ -61,8 +61,8 @@
     <button class="download-button" onclick="downloadGraph()">Download Graph</button>
 </div>
 <script th:inline="javascript">
-    var competencies = /*[[${competencies}]]*/ [];
-    var grades = /*[[${grades}]]*/ [];
+    /*[[${competencies}]]*/ var competencies = [[${competencies}]];
+    /*[[${grades}]]*/ var grades = [[${grades}]];
 
     console.log("Competencies:", competencies);
     console.log("Grades:", grades);
@@ -206,8 +206,6 @@
         link.href = tempCanvas.toDataURL('image/jpeg', 1.0); // Качество 100%
         link.click();
     }
-    console.log("Competencies:", /*[[${competencies}]]*/ []);
-    console.log("Grades:", /*[[${grades}]]*/ []);
 </script>
 </body>
 </html>

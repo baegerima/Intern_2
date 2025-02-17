@@ -1,197 +1,213 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Competency Grades Bar Chart</title>
-  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-annotation@3.0.1/dist/chartjs-plugin-annotation.min.js"></script>
-  <style>
-    body {
-      margin: 0;
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      align-items: center;
-      height: 100vh;
-      background-color: #f4e1d2;
-    }
-    .chart-container {
-      width: 95vw;
-      height: 80vh;
-      background-color: white;
-      padding: 20px;
-      border-radius: 10px;
-      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    }
-    .button-container {
-      margin-top: 20px;
-      display: flex;
-      gap: 10px;
-    }
-    .redirect-button, .download-button {
-      padding: 10px 20px;
-      font-size: 18px;
-      color: white;
-      border: none;
-      cursor: pointer;
-      border-radius: 5px;
-      transition: 0.3s;
-    }
-    .redirect-button {
-      background-color: chocolate;
-    }
-    .redirect-button:hover {
-      background-color: #d2691e;
-    }
-    .download-button {
-      background-color: #8b4513;
-    }
-    .download-button:hover {
-      background-color: #a0522d;
-    }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Competency Grades Bar Chart</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-annotation@3.0.1/dist/chartjs-plugin-annotation.min.js"></script>
+    <style>
+        body {
+            margin: 0;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: #f4e1d2;
+        }
+        .chart-container {
+            width: 95vw;
+            height: 80vh;
+            background-color: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+        .button-container {
+            margin-top: 20px;
+            display: flex;
+            gap: 10px;
+        }
+        .redirect-button, .download-button {
+            padding: 10px 20px;
+            font-size: 18px;
+            color: white;
+            border: none;
+            cursor: pointer;
+            border-radius: 5px;
+            transition: 0.3s;
+        }
+        .redirect-button {
+            background-color: chocolate;
+        }
+        .redirect-button:hover {
+            background-color: #d2691e;
+        }
+        .download-button {
+            background-color: #8b4513;
+        }
+        .download-button:hover {
+            background-color: #a0522d;
+        }
+    </style>
 </head>
 <body>
 <div class="chart-container">
-  <canvas id="competencyChart"></canvas>
+    <canvas id="competencyChart"></canvas>
 </div>
 <div class="button-container">
-  <button class="redirect-button" onclick="redirectToStudentGrades()">Go to Student Grades</button>
-  <button class="download-button" onclick="downloadGraph()">Download Graph</button>
+    <button class="redirect-button" onclick="redirectToStudentGrades()">Go to Student Grades</button>
+    <button class="download-button" onclick="downloadGraph()">Download Graph</button>
 </div>
-<script src="/js/chart.js" th:inline="javascript">
-  var competencies = /*[[${competencies}]]*/ [];
-  var grades = /*[[${grades}]]*/ [];
+<script th:inline="javascript">
+    var competencies = /*[[${competencies}]]*/ [];
+    var grades = /*[[${grades}]]*/ [];
 
-  console.log("Competencies:", competencies);
-  console.log("Grades:", grades);
+    console.log("Competencies:", competencies);
+    console.log("Grades:", grades);
 
-  if (competencies.length === 0 || grades.length === 0) {
-    console.warn("Warning: No data available for chart.");
-  }
-
-  // Render the chart using Chart.js
-  const ctx = document.getElementById('competencyChart').getContext('2d');
-  const chart = new Chart(ctx, {
-    type: 'bar',
-    data: {
-      labels: competencies,
-      datasets: [{
-        label: 'Average Grade',
-        data: grades,
-        backgroundColor: 'rgba(248,2,36,0.2)',
-        borderColor: 'rgb(163,0,34)',
-        borderWidth: 1
-      }]
-    },
-    options: {
-      responsive: true,
-      maintainAspectRatio: false,
-      plugins: {
-        legend: {
-          display: true,
-          position: 'top'
-        },
-        annotation: {
-          annotations: {
-            line50: {
-              type: 'line',
-              yMin: 50,
-              yMax: 50,
-              borderColor: 'rgba(255, 235, 59, 0.6)',
-              borderWidth: 2,
-              borderDash: [5, 5],
-              label: {
-                enabled: true,
-                content: 'Median (50)',
-                position: 'end',
-                backgroundColor: 'rgba(255, 235, 59, 0.8)',
-                color: '#000',
-                font: {
-                  size: 14,
-                  weight: 'bold'
-                }
-              }
-            },
-            line80: {
-              type: 'line',
-              yMin: 80,
-              yMax: 80,
-              borderColor: 'rgba(102, 187, 106, 0.6)',
-              borderWidth: 2,
-              borderDash: [5, 5],
-              label: {
-                enabled: true,
-                content: 'High Achievement (80)',
-                position: 'end',
-                backgroundColor: 'rgba(102, 187, 106, 0.8)',
-                color: '#000',
-                font: {
-                  size: 14,
-                  weight: 'bold'
-                }
-              }
-            }
-          }
-        }
-      },
-      scales: {
-        y: {
-          beginAtZero: true,
-          max: 100,
-          title: {
-            display: true,
-            text: 'Grades',
-            font: {
-              size: 18
-            }
-          },
-          ticks: {
-            font: {
-              size: 16
-            },
-            callback: function(value) {
-              if (value === 50) return 'Median (50)';
-              if (value === 80) return 'High Achievement (80)';
-              return value;
-            }
-          }
-        },
-        x: {
-          title: {
-            display: true,
-            text: 'Competencies',
-            font: {
-              size: 18
-            }
-          },
-          ticks: {
-            autoSkip: false,
-            maxRotation: 45,
-            minRotation: 45,
-            font: {
-              size: 14
-            }
-          }
-        }
-      }
+    if (competencies.length === 0 || grades.length === 0) {
+        console.warn("Warning: No data available for chart.");
     }
-  });
+
+    const ctx = document.getElementById('competencyChart').getContext('2d');
+    const chart = new Chart(ctx, {
+        type: 'bar',
+        data: {
+            labels: competencies.map(name => name.length > 20 ? name.replace(/(.{20})/g, '$1\n') : name),
+            datasets: [{
+                label: 'Average Grade',
+                data: grades,
+                backgroundColor: 'rgba(248,2,36,0.2)',
+                borderColor: 'rgb(163,0,34)',
+                borderWidth: 1
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+                legend: {
+                    display: true,
+                    position: 'top'
+                },
+                annotation: {
+                    annotations: {
+                        line50: {
+                            type: 'line',
+                            yMin: 50,
+                            yMax: 50,
+                            borderColor: 'rgba(255, 235, 59, 0.6)',
+                            borderWidth: 2,
+                            borderDash: [5, 5],
+                            label: {
+                                enabled: true,
+                                content: 'Median (50)',
+                                position: 'end',
+                                backgroundColor: 'rgba(255, 235, 59, 0.8)',
+                                color: '#000',
+                                font: {
+                                    size: 14,
+                                    weight: 'bold'
+                                }
+                            }
+                        },
+                        line80: {
+                            type: 'line',
+                            yMin: 80,
+                            yMax: 80,
+                            borderColor: 'rgba(102, 187, 106, 0.6)',
+                            borderWidth: 2,
+                            borderDash: [5, 5],
+                            label: {
+                                enabled: true,
+                                content: 'High Achievement (80)',
+                                position: 'end',
+                                backgroundColor: 'rgba(102, 187, 106, 0.8)',
+                                color: '#000',
+                                font: {
+                                    size: 14,
+                                    weight: 'bold'
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            scales: {
+                y: {
+                    beginAtZero: true,
+                    max: 100,
+                    title: {
+                        display: true,
+                        text: 'Grades',
+                        font: {
+                            size: 18
+                        }
+                    },
+                    ticks: {
+                        font: {
+                            size: 16
+                        },
+                        callback: function(value) {
+                            if (value === 50) return 'Median (50)';
+                            if (value === 80) return 'High Achievement (80)';
+                            return value;
+                        }
+                    }
+                },
+                x: {
+                    title: {
+                        display: true,
+                        text: 'Competencies',
+                        font: {
+                            size: 18
+                        }
+                    },
+                    ticks: {
+                        autoSkip: false,
+                        maxRotation: 45,
+                        minRotation: 45,
+                        font: {
+                            size: 14
+                        }
+                    }
+                }
+            }
+        }
+    });
+
     function redirectToStudentGrades() {
-    window.location.href = "https://transcript2-c5ec5ab05f1a.herokuapp.com/student-grades";  // Замените на нужный URL
-  }
+        window.location.href = "https://transcriptfront-62cad49a4e47.herokuapp.com/student-grades";
+    }
 
     function downloadGraph() {
-    const canvas = document.getElementById('competencyChart');
-    const url = canvas.toDataURL('image/png');
-    const link = document.createElement('a');
-    link.href = url;
-    link.download = 'competency-chart.png';
-    link.click();
-  }
+        const canvas = document.getElementById('competencyChart');
+        const ctx = canvas.getContext('2d');
 
+        // Создаем временный холст
+        const tempCanvas = document.createElement('canvas');
+        const tempCtx = tempCanvas.getContext('2d');
 
+        tempCanvas.width = canvas.width;
+        tempCanvas.height = canvas.height;
+
+        // Заполняем фон белым цветом
+        tempCtx.fillStyle = '#ffffff';
+        tempCtx.fillRect(0, 0, tempCanvas.width, tempCanvas.height);
+
+        // Рисуем график поверх белого фона
+        tempCtx.drawImage(canvas, 0, 0);
+
+        // Создаем ссылку для скачивания в формате JPEG
+        const link = document.createElement('a');
+        link.download = 'competency_chart.jpg';
+        link.href = tempCanvas.toDataURL('image/jpeg', 1.0); // Качество 100%
+        link.click();
+    }
+    console.log("Competencies:", /*[[${competencies}]]*/ []);
+    console.log("Grades:", /*[[${grades}]]*/ []);
 </script>
 </body>
 </html>

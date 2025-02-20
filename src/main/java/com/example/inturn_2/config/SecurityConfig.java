@@ -33,6 +33,10 @@ public class SecurityConfig {
                 .cors(Customizer.withDefaults())
                 .authorizeHttpRequests(request -> request.requestMatchers("/auth/**", "/public/**").permitAll()
                         .requestMatchers("/user/**").hasAnyAuthority("USER")
+                        .requestMatchers("/unique-competences/**").permitAll()
+                        .requestMatchers("/shared-competences/**").permitAll()
+                        .requestMatchers("/course-shared-competences/**").permitAll()
+                        .requestMatchers("/course-unique-competences/**").permitAll()
                         .requestMatchers("/barChart").permitAll() // Allow authenticated users
                         .anyRequest().authenticated())
                 .sessionManagement(manager -> manager.sessionCreationPolicy(SessionCreationPolicy.STATELESS))

@@ -10,7 +10,7 @@ public class CorsConfig implements WebMvcConfigurer {
     @Override
     public void addCorsMappings(CorsRegistry registry) {
         registry.addMapping("/**")
-                .allowedOrigins("https://transcriptfront-62cad49a4e47.herokuapp.com/") // два URL
+                .allowedOrigins("https://transcriptfront-62cad49a4e47.herokuapp.com") // два URL
                 .allowedMethods("GET", "POST", "PUT", "DELETE")
                 .allowedHeaders("*");
 

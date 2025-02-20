@@ -32,7 +32,7 @@ public class SecurityConfig {
         httpSecurity.csrf(AbstractHttpConfigurer::disable)
                 .cors(Customizer.withDefaults())
                 .authorizeHttpRequests(request -> request.requestMatchers("/auth/**", "/public/**").permitAll()
-                        .requestMatchers("/user/**").hasAnyAuthority("USER")
+                        .requestMatchers("/user/**").permitAll()
                         .requestMatchers("/unique-competences/**").permitAll()
                         .requestMatchers("/shared-competences/**").permitAll()
                         .requestMatchers("/course-shared-competences/**").permitAll()

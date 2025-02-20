@@ -38,7 +38,6 @@ public class SecurityConfig {
                         .requestMatchers("/course-shared-competences/**").permitAll()
                         .requestMatchers("/course-unique-competences/**").permitAll()
                         .requestMatchers("/barChart").permitAll() // Allow authenticated users
-                        .requestMatchers("/public/**").permitAll() // Разрешить публичные API
                         .anyRequest().authenticated())
                 .sessionManagement(manager -> manager.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authenticationProvider(authenticationProvider()).addFilterBefore(
